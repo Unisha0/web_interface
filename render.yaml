@@ -1,0 +1,24 @@
+databases:
+  - name: tasky-db
+    databaseName: tasky
+    user: tasky
+    plan: free
+
+services:
+  - type: web
+    name: tasky-assistant
+    runtime: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn tasky_system.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: tasky-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: PYTHON_VERSION
+        value: 3.11.0

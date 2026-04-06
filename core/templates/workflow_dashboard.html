@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Dashboard - Divi Hosting</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #f5f7fa; }
+        .navbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card { border: none; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .status-badge { display: inline-block; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
+        .status-new { background: #e3f2fd; color: #1976d2; }
+        .status-qualified { background: #f3e5f5; color: #7b1fa2; }
+        .status-won { background: #e8f5e9; color: #388e3c; }
+        .status-human { background: #fff3e0; color: #f57c00; }
+        .step-progress { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .step { text-align: center; font-size: 0.8rem; flex: 1; }
+        .step.active { color: #667eea; font-weight: bold; }
+        table { font-size: 0.9rem; }
+        th { background: #667eea; color: white; }
+    </style>
+</head>
+<body>
+<nav class="navbar">
+    <div class="container">
+        <h2 class="text-white mb-0">📊 Divi Hosting Workflow Dashboard</h2>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card p-4 text-center">
+                <h3 class="text-primary">{{ leads.count }}</h3>
+                <p class="text-muted mb-0">Total Leads</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-4 text-center">
+                <h3 class="text-success">{% widthratio leads_won leads.count 100 %}%</h3>
+                <p class="text-muted mb-0">Conversion Rate</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-4 text-center">
+                <h3 class="text-warning">{{ leads_active }}</h3>
+                <p class="text-muted mb-0">In Production</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card p-4 text-center">
+                <h3 class="text-info">{{ leads_support }}</h3>
+                <p class="text-muted mb-0">With Support</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-white">
+            <h5 class="mb-0">All Leads</h5>
+        </div>
+        <div class="card-body p-0">
+            {% if leads %}
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Step</th>
+                            <th>Timeline</th>
+                            <th>Payment</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lead in leads %}
+                        <tr>
+                            <td><strong>#{{ lead.id }}</strong></td>
+                            <td>
+                                <div>{{ lead.name }}</div>
+                                <small class="text-muted">{{ lead.email }}</small>
+                            </td>
+                            <td>{{ lead.get_project_type_display }}</td>
+                            <td>
+                                <span class="status-badge status-{{ lead.stage }}">
+                                    {{ lead.get_stage_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <small>
+                                    {% if lead.current_workflow_step == 'sales' %}📝 Sales{% endif %}
+                                    {% if lead.current_workflow_step == 'intake' %}📋 Intake{% endif %}
+                                    {% if lead.current_workflow_step == 'pricing' %}💰 Pricing{% endif %}
+                                    {% if lead.current_workflow_step == 'production' %}🚀 Production{% endif %}
+                                    {% if lead.current_workflow_step == 'invoice' %}📄 Invoice{% endif %}
+                                    {% if lead.current_workflow_step == 'delivery' %}✅ Delivered{% endif %}
+                                    {% if lead.current_workflow_step == 'support' %}💬 Support{% endif %}
+                                </small>
+                            </td>
+                            <td>{{ lead.get_timeline_display }}</td>
+                            <td>
+                                <span class="badge bg-{{ lead.payment_status|default:'secondary' }}">
+                                    {{ lead.get_payment_status_display|default:'N/A' }}
+                                </span>
+                            </td>
+                            <td><small>{{ lead.created_at|date:'M d, Y' }}</small></td>
+                            <td>
+                                <a href="{% url 'workflow_dashboard' %}" class="btn btn-sm btn-outline-primary">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="p-5 text-center text-muted">
+                <h5>No leads yet</h5>
+                <p>Start by creating a new lead in the sales form.</p>
+                <a href="{% url 'sales_lead' %}" class="btn btn-primary">Create New Lead</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{% url 'sales_lead' %}" class="btn btn-primary btn-lg">
+            + New Lead
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

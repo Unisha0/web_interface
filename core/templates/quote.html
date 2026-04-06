@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasky | Quote</title>
+    <style>
+        body { font-family: Georgia, "Times New Roman", serif; background: linear-gradient(160deg, #f3ece4, #e9f2df); margin: 0; color: #232019; }
+        .wrap { max-width: 860px; margin: 2rem auto; background: #fffef8; border-radius: 14px; padding: 1.5rem 2rem; box-shadow: 0 12px 30px rgba(30, 23, 12, 0.14); }
+        .row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e4dbc7; padding: 0.5rem 0; }
+        .tag { background: #f0ead7; padding: 0.25rem 0.5rem; border-radius: 6px; }
+        .total { font-size: 1.6rem; margin-top: 1rem; }
+        .note { background: #edf5ea; border-left: 4px solid #3d6b3a; padding: 0.7rem 0.9rem; margin: 1rem 0; }
+        .cta { display: inline-block; text-decoration: none; background: #3f5f2b; color: white; padding: 0.6rem 1rem; border-radius: 7px; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>Step 3: Pricing / Quotation</h1>
+    <p><strong>Rough sales estimate:</strong> <span class="tag">{{ rough_price|default:"Shared only for serious leads" }}</span></p>
+
+    <h3>Itemized Breakdown</h3>
+    {% for item in breakdown %}
+        <div class="row"><span>{{ item }}</span></div>
+    {% empty %}
+        <p>No billable items found.</p>
+    {% endfor %}
+
+    <div class="total"><strong>Total setup/project cost: ${{ total }}</strong></div>
+
+    {% if monthly_cost %}
+        <div class="note">Recurring monthly cost: <strong>${{ monthly_cost }}</strong></div>
+    {% endif %}
+
+    {% for note in notes %}
+        <div class="note">{{ note }}</div>
+    {% endfor %}
+
+    <a class="cta" href="/success/">Confirm & Move to Production</a>
+</div>
+</body>
+</html>

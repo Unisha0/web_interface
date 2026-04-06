@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice - Divi Hosting</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 0; }
+        .invoice-box { background: white; border: 2px solid #667eea; border-radius: 10px; padding: 30px; margin-bottom: 20px; }
+        .invoice-header { border-bottom: 2px solid #667eea; padding-bottom: 20px; margin-bottom: 20px; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .step-badge { display: inline-block; background: white; color: #667eea; padding: 10px 20px; border-radius: 20px; font-weight: bold; }
+        .invoice-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .invoice-total { font-weight: bold; font-size: 1.3rem; color: #667eea; padding-top: 20px; border-top: 2px solid #667eea; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-center mb-40 mt-5">
+        <div class="step-badge mb-3">Step 5 of 7: Invoice & Payment</div>
+        <h1 class="text-white mb-2">Invoice #{{ invoice_id }}</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="invoice-box">
+                <div class="invoice-header">
+                    <h3>Divi Hosting Invoice</h3>
+                    <p class="mb-0 text-muted">Invoice ID: {{ invoice_id }}</p>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Bill To:</strong></p>
+                        <p>{{ lead.name }}<br>{{ lead.email }}<br>{{ lead.phone }}</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <p><strong>Amount Due:</strong></p>
+                        <p style="font-size: 1.3rem; color: #667eea; font-weight: bold;">${{ amount_due|floatformat:2 }}</p>
+                    </div>
+                </div>
+
+                <div class="invoice-items mb-4">
+                    <div class="invoice-item">
+                        <span>Project Services</span>
+                        <span>${{ amount_due|floatformat:2 }}</span>
+                    </div>
+                    <div class="invoice-total">
+                        <div class="invoice-item">
+                            <span>Total Due</span>
+                            <span>${{ amount_due|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>📋 Payment Terms:</strong> Due within 7 days. Payment via bank transfer, credit card, or PayPal.
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body p-5">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <div class="form-check">
+                                {{ form.payment_received }}
+                                <label class="form-check-label" for="id_payment_received">
+                                    {{ form.payment_received.label }} (Admin only)
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Confirm & Continue →
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

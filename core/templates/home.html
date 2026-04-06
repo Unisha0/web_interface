@@ -1,0 +1,11 @@
+<h2>Tasky AI System</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Calculate</button>
+</form>
+
+{% if total %}
+    <h3>Total Price: ${{ total }}</h3>
+{% endif %}

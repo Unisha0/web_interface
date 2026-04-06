@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasky | Sales Qualification</title>
+    <style>
+        body { font-family: Georgia, "Times New Roman", serif; background: linear-gradient(130deg, #f2efe8, #d8e7de); margin: 0; color: #1e2a24; }
+        .wrap { max-width: 860px; margin: 2rem auto; background: #fffdf8; border-radius: 14px; padding: 1.5rem 2rem; box-shadow: 0 14px 40px rgba(10, 26, 18, 0.16); }
+        h1 { margin-top: 0; letter-spacing: 0.02em; }
+        .hint { background: #eef4ea; border-left: 4px solid #376847; padding: 0.8rem 1rem; margin: 1rem 0; }
+        .result { background: #fff4da; border-left: 4px solid #9a6c11; padding: 0.8rem 1rem; margin: 1rem 0; }
+        .errorlist { color: #842029; }
+        button { background: #234d35; color: #fff; border: none; padding: 0.7rem 1.2rem; border-radius: 8px; cursor: pointer; }
+        button:hover { background: #2f6848; }
+        .secondary { background: #8b6a21; margin-left: 0.5rem; }
+        .secondary:hover { background: #9e7a2c; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>Step 1: Sales / Lead Capture</h1>
+    <div class="hint">
+        Rules applied in this step: mandatory contact data, qualification checks, optional human handoff,
+        rough pricing only for serious leads.
+    </div>
+    <div class="hint">
+        Practical rule: Assets readiness is auto-calculated from Logo ready + Content ready + Images ready.
+    </div>
+    <div class="hint">
+        Mandatory: Name, Email, Phone, Client need, Expected benefit, First message, Project type, Budget, Timeline, Contact preference.
+        Optional (used for seriousness scoring): business link, decision maker, business ready, willing to call, deposit readiness, and assets checks.
+    </div>
+    {% if qualification_feedback %}
+    <div class="result">
+        <strong>Lead not moved to intake yet.</strong><br>
+        Score: {{ qualification_feedback.score }} | Level: {{ qualification_feedback.level }}<br>
+        Next action: {{ qualification_feedback.next_action }}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Continue to Intake</button>
+        {% if qualification_feedback.can_override %}
+        <button type="submit" name="force_intake" value="1" class="secondary">Continue to Intake Anyway</button>
+        {% endif %}
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation - Divi Hosting</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 0; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .card-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .quote-box { background: #f8f9ff; border: 2px solid #667eea; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
+        .price-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .price-item.total { font-weight: bold; font-size: 1.2rem; border: none; padding-top: 15px; color: #667eea; }
+        .step-badge { display: inline-block; background: white; color: #667eea; padding: 10px 20px; border-radius: 20px; font-weight: bold; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="text-center mb-40 mt-5">
+        <div class="step-badge mb-3">Step 3 of 7: Quotation & Pricing</div>
+        <h1 class="text-white mb-2">Your Custom Quote</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">💰 Project Quote</h4>
+                </div>
+                <div class="card-body p-5">
+                    <div class="quote-box">
+                        {% if quote %}
+                        <div class="price-item">
+                            <span>{{ quote.service }}</span>
+                            <span>${{ quote.base_price }}</span>
+                        </div>
+                        {% if quote.priority != 'normal' %}
+                        <div class="price-item">
+                            <span>{{ quote.priority|upper }} Priority ({{ quote.priority_multiplier }}x)</span>
+                            <span>+${{ quote.base_price|floatformat:2 }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="price-item total">
+                            <span>Total Estimated Cost</span>
+                            <span>${{ quote.total|floatformat:2 }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <div class="form-check">
+                                {{ form.approve_quote }}
+                                <label class="form-check-label" for="id_approve_quote">
+                                    {{ form.approve_quote.label }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_notes" class="form-label fw-bold">📝 Notes (Optional)</label>
+                            {{ form.notes }}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Approve & Continue to Invoice →
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

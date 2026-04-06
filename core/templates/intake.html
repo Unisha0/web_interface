@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasky | Intake</title>
+    <style>
+        body { font-family: Georgia, "Times New Roman", serif; background: radial-gradient(circle at top right, #f7f4eb, #dfe9ef 45%, #dbe2d0); margin: 0; color: #16252a; }
+        .wrap { max-width: 860px; margin: 2rem auto; background: #fcfcf8; border-radius: 14px; padding: 1.5rem 2rem; box-shadow: 0 12px 35px rgba(8, 22, 31, 0.14); }
+        h1 { margin-top: 0; }
+        .meta { background: #eaf2f7; border-left: 4px solid #2d5f7f; padding: 0.8rem 1rem; margin: 1rem 0; }
+        button { background: #1f4f5e; color: white; border: none; padding: 0.7rem 1.2rem; border-radius: 8px; cursor: pointer; }
+        button:hover { background: #2d7085; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <h1>Step 2: Intake / Requirements</h1>
+    <div class="meta">
+        Lead: <strong>{{ lead.name }}</strong> | Requested service: <strong>{{ lead.project_type }}</strong>
+    </div>
+    <p>Rules: complete requirements before exact pricing, capture timeline/priority, and record add-ons.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Generate Exact Quote</button>
+    </form>
+</div>
+</body>
+</html>

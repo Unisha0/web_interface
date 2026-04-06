@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divi Hosting - Sales Inquiry</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 40px 0; }
+        .card { border: none; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .card-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px 15px 0 0; }
+        .form-control, .form-select { border-radius: 8px; border: 1px solid #ddd; }
+        .form-control:focus, .form-select:focus { border-color: #667eea; box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 8px; padding: 10px 30px; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4); }
+        .step-indicator { text-align: center; margin-bottom: 30px; }
+        .step-indicator h1 { color: white; font-size: 2.5rem; margin-bottom: 10px; }
+        .step-badge { display: inline-block; background: white; color: #667eea; padding: 10px 20px; border-radius: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="step-indicator">
+        <div class="step-badge">Step 1 of 7: Sales Lead Capture</div>
+        <h1>Welcome to Divi Hosting! 🎉</h1>
+        <p class="text-white">Let's start by capturing your project details</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">📝 Project Information</h4>
+                </div>
+                <div class="card-body p-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <div class="mb-4">
+                            <label for="id_name" class="form-label fw-bold">👤 Full Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger small mt-2">{{ form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_email" class="form-label fw-bold">📧 Email Address</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-2">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_phone" class="form-label fw-bold">📱 Phone Number</label>
+                            <small class="d-block text-muted mb-2">*Phone capture verifies your seriousness</small>
+                            {{ form.phone }}
+                            {% if form.phone.errors %}
+                                <div class="text-danger small mt-2">{{ form.phone.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">🚀 What service are you interested in?</label>
+                            <div class="service-options">
+                                {% for value, label in form.service_type.field.choices %}
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="radio" name="service_type" value="{{ value }}" id="id_service_type_{{ value }}">
+                                        <label class="form-check-label" for="id_service_type_{{ value }}">
+                                            {{ label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% if form.service_type.errors %}
+                                <div class="text-danger small mt-2">{{ form.service_type.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">⏱️ Project Timeline</label>
+                            <div class="timeline-options">
+                                {% for value, label in form.timeline.field.choices %}
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="timeline" value="{{ value }}" id="id_timeline_{{ value }}" {% if value == 'normal' %}checked{% endif %}>
+                                        <label class="form-check-label" for="id_timeline_{{ value }}">
+                                            {{ label }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="id_message" class="form-label fw-bold">💬 Project Details (Optional)</label>
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                                <div class="text-danger small mt-2">{{ form.message.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                {{ form.want_human }}
+                                <label class="form-check-label" for="id_want_human">
+                                    I prefer to speak with a human representative
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Continue to Intake →
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 text-white">
+                <p>🔒 Your information is secure and will only be used to process your request.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
